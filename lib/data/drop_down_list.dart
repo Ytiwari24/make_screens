@@ -23,3 +23,11 @@ List<String> districtList = const [
   'Azamgarh',
 ];
 List<String> pincodeList = const ['Pincode', '400601', '400602', '400603'];
+
+List<String> backgroundList = const [
+  'Family Background',
+  'Rich',
+  'Middle Class',
+  'Poor'
+];
+List<String> memberList = const ['Family Member Name', 'Pravind', 'Sachin'];

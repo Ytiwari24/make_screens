@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:make_screens/constants/dimensions.dart';
 import 'package:make_screens/widgets/custom_text.dart';
 import '../constants/colors.dart';
@@ -7,10 +11,31 @@ import '../data/drop_down_list.dart';
 import '../utils/custom_drop_down.dart';
 import '../utils/custom_elevated_button.dart';
 import '../utils/custom_text_field.dart';
+import 'other_details.dart';
 
-class ContactDetails extends StatelessWidget {
-  ContactDetails({super.key});
+class ContactDetails extends StatefulWidget {
+  const ContactDetails({super.key});
+
+  @override
+  State<ContactDetails> createState() => _ContactDetailsState();
+}
+
+class _ContactDetailsState extends State<ContactDetails> {
   var isSame = false.obs;
+
+  File? _selectedImage;
+
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _selectedImage = File(pickedFile.path);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,65 +163,150 @@ class ContactDetails extends StatelessWidget {
                     ],
                   ),
                   height10(),
-                  // Row(
-                  //   children: [
-                  //     const Expanded(
-                  //         child: CustomTextField(lable: 'Contact No')),
-                  //     Expanded(
-                  //       child: CustomDropDown(
-                  //         items: bloodGroupList,
-                  //         initialValue: 'Blood Group',
-                  //         onChanged: (String selectedValue) {},
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // height10(),
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: [
-                  //     Expanded(
-                  //       child: CustomDropDown(
-                  //         items: disabilityList,
-                  //         initialValue: 'Any Disability',
-                  //         onChanged: (String selectedValue) {},
-                  //       ),
-                  //     ),
-                  //     const Expanded(
-                  //         child: CustomTextField(
-                  //       lable: 'Disability Details',
-                  //       minLines: 3,
-                  //     )),
-                  //   ],
-                  // ),
-                  // height10(),
-                  // Row(
-                  //   children: [
-                  //     Expanded(
-                  //       child: CustomDropDown(
-                  //         items: martialStatusList,
-                  //         initialValue: 'Martial Status',
-                  //         onChanged: (String selectedValue) {},
-                  //       ),
-                  //     ),
-                  //     const Expanded(
-                  //         child: CustomTextField(lable: 'Spouse Name')),
-                  //   ],
-                  // ),
-                  sizedHeight(40),
-                  const Row(
+
+                  CustomDropDown(
+                    items: backgroundList,
+                    initialValue: 'Family Background',
+                    onChanged: (String selectedValue) {},
+                  ),
+                  height10(),
+                  CustomDropDown(
+                    items: memberList,
+                    initialValue: 'Family Member Name',
+                    onChanged: (String selectedValue) {},
+                  ),
+
+                  Row(
                     children: [
-                      Expanded(
-                        child: CustomElevatedButton(
-                          label: 'Previous',
+                      SizedBox(
+                        height: 100,
+                        width: 120,
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: _pickImage,
+                            child: DottedBorder(
+                              color: redColor,
+                              strokeWidth: 1,
+                              borderType: BorderType.RRect,
+                              radius: const Radius.circular(15),
+                              dashPattern: const [5, 5],
+                              child: _selectedImage != null
+                                  ? Image.file(
+                                      _selectedImage!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const SizedBox(
+                                      height: 80,
+                                      width: 100,
+                                      child: Icon(
+                                        Icons.image_outlined,
+                                        size: 60,
+                                      ),
+                                    ),
+                            ),
+                          ),
                         ),
                       ),
-                      SizedBox(
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            customText('Upload Aadhar Card',
+                                fontweight: FontWeight.bold),
+                            InkWell(
+                              onTap: _pickImage,
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: redColor),
+                                ),
+                                child: customText('Choose File'),
+                              ),
+                            ),
+                            customText(
+                              'Select jpg, jpeg, png files only',
+                              fontsize: 10,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          alignment: Alignment.bottomCenter,
+                          padding: const EdgeInsets.all(5),
+                          color: const Color.fromARGB(255, 6, 143, 10),
+                          child: const Icon(
+                            Icons.add,
+                            color: whiteColor,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  height10(),
+                  Card(
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14)),
+                    shadowColor: Colors.black,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            customText('Name :', fontweight: FontWeight.bold),
+                            customText('Relation :',
+                                fontweight: FontWeight.bold),
+                            customText('Aadhar Card :',
+                                fontweight: FontWeight.bold),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                customText('Action :',
+                                    fontweight: FontWeight.bold),
+                                InkWell(
+                                    onTap: () {},
+                                    child: const Icon(
+                                      Icons.delete,
+                                      color: Colors.grey,
+                                    ))
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  sizedHeight(40),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: const CustomElevatedButton(
+                            label: 'Previous',
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
                         width: 20,
                       ),
                       Expanded(
-                        child: CustomElevatedButton(
-                          label: 'Next',
+                        child: InkWell(
+                          onTap: () {
+                            Get.to(() => const OtherDetails());
+                          },
+                          child: const CustomElevatedButton(
+                            label: 'Next',
+                          ),
                         ),
                       ),
                     ],
