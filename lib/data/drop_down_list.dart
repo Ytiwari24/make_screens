@@ -13,3 +13,13 @@ List<String> martialStatusList = const [
   'Married',
   'Divorced'
 ];
+
+List<String> statesList = const ['State', 'Jammu', 'MH', 'UP'];
+
+List<String> cityList = const ['City', 'Mumbai', 'Thane', 'BSB'];
+List<String> districtList = const [
+  'District',
+  'Thane',
+  'Azamgarh',
+];
+List<String> pincodeList = const ['Pincode', '400601', '400602', '400603'];
